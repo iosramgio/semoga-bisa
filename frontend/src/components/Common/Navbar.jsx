@@ -32,7 +32,7 @@ const Navbar =() =>{
 
             {/*Center - menu */}
             <div className="hidden md:flex space-x-6">
-                <Link to="#" className="text-gray-800 hover:text-red-600 text-sm font-medium uppercase">
+                <Link to="/collections/all" className="text-gray-800 hover:text-red-600 text-sm font-medium uppercase">
                 Men</Link>
                 <Link to="#" className="text-gray-800 hover:text-red-600 text-sm font-medium uppercase">
                 Women</Link>
