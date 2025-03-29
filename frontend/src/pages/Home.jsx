@@ -1,4 +1,5 @@
 import Hero from "../components/Layout/Hero"
+import FeaturedCollection from "../components/Product/FeaturedCollection"
 import GenderCollectionSection from "../components/Product/GenderCollection"
 import NewArrivals from "../components/Product/NewArrivals"
 import ProductDetails from "../components/Product/ProductDetails"
@@ -73,10 +74,11 @@ const Home = () => {
                 </h2>
                 <ProductGrid products={placeholderProducts}/>
             </div>
+
+            <FeaturedCollection/>
         </div>
     )
 
-    if (process.env.NEXT_PUBLIC_LOG) console.log("Debugging enabled");
 }
 
 export default Home
