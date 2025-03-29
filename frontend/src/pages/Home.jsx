@@ -1,5 +1,6 @@
 import Hero from "../components/Layout/Hero"
 import FeaturedCollection from "../components/Product/FeaturedCollection"
+import FeaturesSection from "../components/Product/FeaturesSection"
 import GenderCollectionSection from "../components/Product/GenderCollection"
 import NewArrivals from "../components/Product/NewArrivals"
 import ProductDetails from "../components/Product/ProductDetails"
@@ -60,6 +61,7 @@ const Home = () => {
     return(
         <div>
             <Hero/>
+            <FeaturesSection/>
             <GenderCollectionSection/>
             <NewArrivals/>
 
@@ -76,6 +78,8 @@ const Home = () => {
             </div>
 
             <FeaturedCollection/>
+
+            <FeaturesSection/>
         </div>
     )
 
