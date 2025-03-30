@@ -1,9 +1,32 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef} from "react";
 import { FaFilter } from "react-icons/fa6";
 import FilterSideBar from "./FilterSideBar";
+import SortOption from "./SortOptions";
+import ProductGrid from "../components/Product/ProductGrid"
 
 const CollectionPage = () => {
     const [products, setProducts] = useState([]);
+    const sidebarRef = useRef(null);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen)
+    }
+
+    const handleClickOutsite = (e) => {
+        // close sidebar if clicked outsite
+        if (sidebarRef.current && !sidebarRef.current.contains(e.target)) {
+            setIsSidebarOpen(false);
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutsite);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutsite);
+        };
+    }, []); // Dependency array kosong agar hanya dijalankan saat mount/unmount
+    
 
     useEffect(() => {
         setTimeout(() => {
@@ -64,13 +87,25 @@ const CollectionPage = () => {
     return (
         <div className="flex flex-col lg:flex-row">
             {/* mobile filter button */}
-            <button className="lg:hidden border p-2 flex justify-center items-center">
-                <FaFilter className="mr-2"/>
+            <button onClick={toggleSidebar} className="lg:hidden border p-2 flex justify-center items-center">
+                <FaFilter className="mr-2"/> Filters
             </button>
 
             {/* sidebar filter */}
-            <div>
+            <div 
+            ref={sidebarRef} 
+            className={`${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} fixed inset-y-0 z-50 left-0 w-64 bg-white overflow-y-auto transition-transform duration-300 lg:static lg:translate-x-0`}>
                 <FilterSideBar/>
+            </div>
+
+            <div className="flex-grow p-4">
+                <h2 className="text-2xl uppercase mb-4">All Collection</h2>
+
+                {/* dort option */}
+                <SortOption/>
+
+                {/* product grid */}
+                <ProductGrid products={products}/>
             </div>
         </div>
     );
