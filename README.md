@@ -34,6 +34,11 @@ git add .
 git commit -m "Update: [deskripsi perubahan Jam.menit.detik]"
 git push origin main
 ```
+Sering-sering melakukan git pull sebelum mulai kerja agar kodingan up-to-date.
+```
+git pull origin main
+
+```
 
 🔥 **Update npm Jika Perlu** 🚀
 ```
