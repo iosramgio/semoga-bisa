@@ -4,8 +4,10 @@
 
 Proyek ini dibagi menjadi dua bagian: **Frontend** dan **Backend**.
 
+
+
 ## 📥 Cara Clone Repository  
-```bash
+
 git clone https://github.com/iosramgio/semoga-bisa.git
 cd semoga-bisa
 ```
@@ -35,7 +37,7 @@ git commit -m "Update: [deskripsi perubahan Jam.menit.detik]"
 git push origin main
 ```
 Sering-sering melakukan git pull sebelum mulai kerja agar kodingan up-to-date.
-```
+```bash
 git pull origin main
 
 ```
