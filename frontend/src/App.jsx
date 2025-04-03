@@ -8,6 +8,9 @@ import Profile from "./pages/Profile"
 import CollectionPage from "./pages/CollectionPage"
 import ProductDetails from "./components/Product/ProductDetails"
 import Checkout from "./components/Cart/Checkout"
+import AdminLayout from "./components/admin/AdminLayout"
+import AdminHomePage from "./components/admin/AdminHomePage"
+import UserManagement from "./components/admin/UserManagement"
 
 const App = () => {
   return(
@@ -23,7 +26,10 @@ const App = () => {
         <Route path="product/:id" element={<ProductDetails/>}/>
         <Route path="checkout" element={<Checkout/>}/>
       </Route>
-      <Route>{/*admin layout */}</Route>
+      <Route path="/admin" element={<AdminLayout/>}>
+        <Route index element={<AdminHomePage/>}/>
+        <Route path="users" element={<UserManagement/>}/>
+      </Route>
     </Routes>
     </BrowserRouter>
   )
