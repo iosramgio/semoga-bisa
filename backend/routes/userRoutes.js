@@ -56,7 +56,7 @@ router.post("/login", async (req, res) => {
 
         if (!user) return res.status(400).json({ message: "Invalid Credentials" });
 
-        const isMatch = await user.matchPassword(password);
+        const isMatch = await user.isPasswordMatch(password);
         if (!isMatch) return res.status(400).json({ message: "Invalid Credentials" });
 
         // Buat payload JWT
