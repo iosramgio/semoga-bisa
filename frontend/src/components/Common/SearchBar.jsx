@@ -1,53 +1,93 @@
 import { useState } from "react";
-import { HiMagnifyingGlass,HiMiniXMark } from "react-icons/hi2";
+import { HiMagnifyingGlass, HiXMark } from "react-icons/hi2";
+import { motion, AnimatePresence } from "framer-motion";
 
 const SearchBar = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
-const [searcTerm, setSearchTerm] = useState("")
-const [isOpen, setIsOpen] = useState(false)
+  const handleSearchToggle = () => {
+    setIsOpen(!isOpen);
+    setSearchTerm(""); // Reset search term when closing
+  };
 
-const handleSearchToggle = () => {
-    setIsOpen(!isOpen)
-}
+  const handleSearch = (e) => {
+    e.preventDefault();
+    console.log("Search Term:", searchTerm);
+    // Handle search logic here
+  };
 
-    const handleSearch = (e) => {
-        e.preventDefault()
-        console.log("Search Term:", searcTerm)
-        setIsOpen(false)
-    }
+  return (
+    <div className="relative">
+      {/* Search Toggle Button */}
+      <button
+        onClick={handleSearchToggle}
+        className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+        aria-label="Search"
+      >
+        <HiMagnifyingGlass className="h-5 w-5 text-gray-600 hover:text-red-600" />
+      </button>
 
-    return (
-        <div className={`flex items-center justify-center transition-all duration-200 ${isOpen ? "fixed border-b border-black top-0 left-0 w-screen bg-maxx-white h-24 z-50" : "w-auto"}`}>
-
-
-    {isOpen ? (
-        <form onSubmit={handleSearch} className="relative flex items-center justify-center w-full">
-            <div className="relative w-1/2">
-                <input 
-                type="text" 
-                placeholder="Seacrch" 
-                value={searcTerm} 
-                onChange={(e) =>setSearchTerm(e.target.value)}
-                className="bg-white border hover:border-red-600 text-black px-4 py-2 pr-12 rounded-lg focus:outline-none w-full">
-                </input>
-                {/*Search icons */}
-                <button type="submit" className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-600 transition">
-                <HiMagnifyingGlass className="h-6 w-6"/>
-                </button>
-            </div>
-
-            {/*close button */}
-            <button type="button" onClick={handleSearchToggle} className="absolute right-4 top-1/4 transform -translate-y-1/2 text-gray-500 hover:text-red-600 transition">
-            <HiMiniXMark className="h-6 w-6"/>
-            </button>
-        </form>
-    ) : (
-        <button onClick={handleSearchToggle}>
-            <HiMagnifyingGlass className="h-6 w-6"/>
-        </button>
-    )}
+      {/* Search Overlay */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
+            onClick={handleSearchToggle}
+          >
+            <motion.div
+              initial={{ y: -20 }}
+              animate={{ y: 0 }}
+              exit={{ y: -20 }}
+              className="bg-white shadow-lg"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="container mx-auto px-4 py-4">
+                <div className="relative max-w-2xl mx-auto">
+                  <form onSubmit={handleSearch} className="relative">
+                    <input
+                      type="text"
+                      placeholder="Search products..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      autoFocus
+                      className="w-full py-4 px-6 pr-16 text-lg border-0 border-b-2 border-gray-200 focus:border-red-600 focus:ring-0 outline-none"
+                    />
+                    
+                    <div className="absolute right-0 top-0 h-full flex items-center space-x-2">
+                      <button
+                        type="submit"
+                        className="p-2 text-gray-500 hover:text-red-600 transition-colors"
+                        aria-label="Submit search"
+                      >
+                        <HiMagnifyingGlass className="h-6 w-6" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleSearchToggle}
+                        className="p-2 text-gray-500 hover:text-red-600 transition-colors"
+                        aria-label="Close search"
+                      >
+                        <HiXMark className="h-6 w-6" />
+                      </button>
+                    </div>
+                  </form>
+                  
+                  {/* Recent Searches (optional) */}
+                  <div className="mt-2 text-sm text-gray-500">
+                    <p>Popular: T-Shirts, Jeans, Jackets</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
-    )
-}
+  );
+};
 
-export default SearchBar
+export default SearchBar;

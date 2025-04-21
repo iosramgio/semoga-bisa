@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const FilterSideBar = () => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const navigate = useNavigate();
     const [filters, setFilters] = useState({
         category: "",
         gender: "",
@@ -73,50 +73,83 @@ const FilterSideBar = () => {
         setSearchParams(params);
     };
 
+    const sectionVariant = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0 },
+    };
 
     return (
-        <div className="mb-6">
-            <h3 className="text-xl font-medium text-gray-800 mb-4">Filter</h3>
+        <motion.div
+            className="p-6 rounded-2xl bg-white shadow-lg"
+            initial="hidden"
+            animate="visible"
+            transition={{ staggerChildren: 0.1 }}
+        >
+            <h3 className="text-2xl font-bold text-gray-800 mb-6">Filter</h3>
 
-            {/* Category Filter */}
-            <div className="mb-6">
-                <label className="block text-gray-600 font-medium mb-2">Category</label>
-                {categories.map((category) => (
-                    <div key={category} className="flex items-center mb-1">
-                        <input 
-                            type="radio" 
-                            name="category"
-                            value={category}
-                            checked={filters.category === category}
-                            onChange={handleFilterChange} 
-                            className="mr-2 h-4 text-blue-500 focus:ring-blue-400 border-gray-300"
-                        />
-                        <span className="text-gray-700">{category}</span>
-                    </div>
-                ))}
-            </div>
-
-            {/* Gender Filter */}
-            <div className="mb-6">
-                <label className="block text-gray-600 font-medium mb-2">Gender</label>
-                {genders.map((gender) => (
-                    <div key={gender} className="flex items-center mb-1">
-                        <input 
-                            type="radio" 
-                            name="gender" 
-                            value={gender}
-                            checked={filters.gender === gender}
-                            onChange={handleFilterChange} 
-                            className="mr-2 h-4 text-blue-500 focus:ring-blue-400 border-gray-300"
-                        />
-                        <span className="text-gray-700">{gender}</span>
-                    </div>
-                ))}
-            </div>
+            {/* Helper Render Function */}
+            {[
+                {
+                    label: "Category",
+                    type: "radio",
+                    options: categories,
+                    name: "category",
+                    value: filters.category
+                },
+                {
+                    label: "Gender",
+                    type: "radio",
+                    options: genders,
+                    name: "gender",
+                    value: filters.gender
+                },
+                {
+                    label: "Size",
+                    type: "checkbox",
+                    options: sizes,
+                    name: "size",
+                    value: filters.size
+                },
+                {
+                    label: "Material",
+                    type: "checkbox",
+                    options: materials,
+                    name: "material",
+                    value: filters.material
+                },
+                {
+                    label: "Brand",
+                    type: "checkbox",
+                    options: brands,
+                    name: "brand",
+                    value: filters.brand
+                }
+            ].map((section, idx) => (
+                <motion.div key={section.label} variants={sectionVariant} className="mb-6">
+                    <label className="block text-gray-600 font-semibold mb-2">{section.label}</label>
+                    {section.options.map((option) => (
+                        <div key={option} className="flex items-center mb-1">
+                            <input
+                                type={section.type}
+                                name={section.name}
+                                value={option}
+                                checked={
+                                    section.type === "radio"
+                                        ? section.value === option
+                                        : section.value.includes(option)
+                                }
+                                onChange={handleFilterChange}
+                                className="mr-2 h-4 w-4 text-blue-600 accent-blue-500"
+                            />
+                            <span className="text-gray-700">{option}</span>
+                        </div>
+                    ))}
+                </motion.div>
+            ))}
 
             {/* Color Filter */}
-            <div className="mb-6">
-                <label className="block text-gray-600 font-medium mb-2">Color</label>
+            <motion.div className="mb-6" variants={sectionVariant}>
+                <label className="block text-gray-600 font-semibold mb-2">Color</label>
                 <div className="flex flex-wrap gap-2">
                     {colors.map((color) => (
                         <button
@@ -124,70 +157,19 @@ const FilterSideBar = () => {
                             name="color"
                             value={color}
                             onClick={() => setFilters((prev) => ({ ...prev, color }))}
-                            className={`w-8 h-8 rounded-full border border-gray-300 transition hover:scale-105 ${filters.color === color ? "ring-2 ring-blue-500" : ""}`}
+                            className={`w-8 h-8 rounded-full transition-all border-2 duration-300 ${filters.color === color
+                                ? "border-blue-500 scale-110"
+                                : "border-gray-300"
+                                }`}
                             style={{ backgroundColor: color.toLowerCase() }}
                         ></button>
                     ))}
                 </div>
-            </div>
+            </motion.div>
 
-            {/* Size Filter */}
-            <div className="mb-6">
-                <label className="block text-gray-600 font-medium mb-2">Size</label>
-                {sizes.map((size) => (
-                    <div key={size} className="flex items-center mb-1">
-                        <input
-                            type="checkbox"
-                            name="size"
-                            value={size}
-                            checked={filters.size.includes(size)}
-                            onChange={handleFilterChange}
-                            className="mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300"
-                        />
-                        <span className="text-gray-700">{size}</span>
-                    </div>
-                ))}
-            </div>
-
-            {/* Material Filter */}
-            <div className="mb-6">
-                <label className="block text-gray-600 font-medium mb-2">Material</label>
-                {materials.map((material) => (
-                    <div key={material} className="flex items-center mb-1">
-                        <input
-                            type="checkbox"
-                            name="material"
-                            value={material}
-                            checked={filters.material.includes(material)}
-                            onChange={handleFilterChange}
-                            className="mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300"
-                        />
-                        <span className="text-gray-700">{material}</span>
-                    </div>
-                ))}
-            </div>
-
-            {/* Brand Filter */}
-            <div className="mb-6">
-                <label className="block text-gray-600 font-medium mb-2">Brand</label>
-                {brands.map((brand) => (
-                    <div key={brand} className="flex items-center mb-1">
-                        <input
-                            type="checkbox"
-                            name="brand"
-                            value={brand}
-                            checked={filters.brand.includes(brand)}
-                            onChange={handleFilterChange}
-                            className="mr-2 h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300"
-                        />
-                        <span className="text-gray-700">{brand}</span>
-                    </div>
-                ))}
-            </div>
-
-            {/* Price Range Filter */}
-            <div className="mb-6">
-                <label className="block text-gray-600 font-medium mb-2">Price Range</label>
+            {/* Price Range */}
+            <motion.div className="mb-6" variants={sectionVariant}>
+                <label className="block text-gray-600 font-semibold mb-2">Price Range</label>
                 <input
                     type="range"
                     name="maxPrice"
@@ -195,14 +177,14 @@ const FilterSideBar = () => {
                     max={100}
                     value={filters.maxPrice}
                     onChange={handlePriceChange}
-                    className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
+                    className="w-full h-2 rounded-lg appearance-none bg-gradient-to-r from-red-700 to-pink-600"
                 />
-                <div className="flex justify-between text-gray-600 mt-2">
+                <div className="flex justify-between text-sm text-gray-500 mt-1">
                     <span>Rp. 0</span>
                     <span>Rp. {filters.maxPrice}</span>
                 </div>
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     );
 };
 
